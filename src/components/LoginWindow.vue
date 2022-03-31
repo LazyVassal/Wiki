@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-  import { ref } from 'vue'
+  import { nextTick, ref } from 'vue'
   import { useStore } from '../store'
   const id = 1, pos = 1;
   const textBoxNew = ref([
@@ -28,24 +28,6 @@ const store =useStore()
   function regestr(){
     store.log = !store.log
     store.reg = !store.reg
-  }
-  function sortArrUp(item: any){
-    var key = item.id;
-    if (textBoxNew.value.length >2 && key != 1){
-        textBoxNew.value[key].position--;
-        textBoxNew.value[key-1].position++;
-        textBoxNew.value.sort(( a, b ) => a.position - b.position);
-    }
-    console.log(textBoxNew.value)
-  }
-  function sortArrDuwn(item: any){
-    var key = item.id;
-    if (textBoxNew.value.length >2 && key !=textBoxNew.value.length){
-        textBoxNew.value[key].position++;
-        textBoxNew.value[key+1].position--;
-        textBoxNew.value.sort(( a, b ) => a.position - b.position);
-    }
-    console.log(textBoxNew.value)
   }
 </script>
 <template>
@@ -89,18 +71,12 @@ const store =useStore()
         </datalist> 
         <input type="text" name="imgSrc" placeholder="img" tabindex="4">
             <label for="imgSrc"> - Добавьте ссылку на картинку</label><br>
-            <table>
+
         <span v-for="item of textBoxNew">
-        <tr><td>
-            <textarea placeholder="Textbox" v-model="item.sod"></textarea>
-        </td>
-        <td><button @click="sortArrDuwn(item)">Вверх</button></td>
-         <td><button @click="sortArrUp(item)">Вниз</button></td>
-        </tr>
+                <textarea placeholder="Textbox" v-model="item.sod"></textarea><br>
         </span>
-        </table>
         <button @click="textBoxNew.push({id: ++id, sod: '', position: ++pos},)">Добавить  абзац</button>
-        <button @click="textBoxNew.pop()">Удалить абзац</button>
+        <button @click="pos--; textBoxNew.pop();">Удалить абзац</button>
         <h3>Рецепты</h3>
         <table>
             <span v-for="item of recepts">
